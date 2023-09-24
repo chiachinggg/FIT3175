@@ -1,0 +1,124 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "padding": 5,
+    "width": 800,
+    "height": 450,
+    "title": {
+        "text": "Nationalities of Artists in MOMA's Collection"
+    },
+    "projection": {
+        "type": "equalEarth"
+    },
+    "layer": [
+        {
+            "data": {
+                "name": "source0",
+                "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/maps/ne_110m.json",
+                "format": {
+                    "type": "topojson",
+                    "feature": "ne_110m_admin_0_countries"
+                }
+            },
+            "mark": {
+                "type": "geoshape",
+                "fill": "lightgrey",
+                "stroke": null,
+                "strokeWidth": 1
+            }
+        },
+        {
+            "data": {
+                "name": "source1",
+                "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/datasets/countries.csv"
+            },
+            "mark": {
+                "type": "text"
+            },
+            "encoding": {
+                "longitude": {
+                    "field": "Longitude",
+                    "type": "quantitative"
+                },
+                "latitude": {
+                    "field": "Latitude",
+                    "type": "quantitative"
+                },
+                "text": {
+                    "field": "Country",
+                    "type": "nominal"
+                }
+            }
+        },
+        {
+            "data": {
+                "name": "source2",
+                "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/datasets/countries.csv"
+            },
+            "mark": {
+                "type": "circle",
+                "tooltip": {
+                    "content": "data"
+                }
+            },
+            "encoding": {
+                "longitude": {
+                    "field": "Longitude",
+                    "type": "quantitative"
+                },
+                "latitude": {
+                    "field": "Latitude",
+                    "type": "quantitative"
+                },
+                "size": {
+                    "field": "Total_years",
+                    "type": "quantitative",
+                    "title": "Number of Years Since Founded",
+                    "scale": {
+                        "domain": [
+                            5,
+                            950
+                        ]
+                    }
+                },
+                "color": {
+                    "field": "UG_average_fees_(in_pounds)",
+                    "type": "quantitative",
+                    "title": [
+                        "Average Undergraduate Fees",
+                        "(in pounds)"
+                    ],
+                    "scale": {
+                        "type": "threshold",
+                        "domain": [
+                            10000,
+                            12500,
+                            15000,
+                            20000
+                        ],
+                        "range": [
+                            "#fdbe85",
+                            "#fd8d3c",
+                            "#e6550d",
+                            "#a63603",
+                            "#7E2811"
+                        ]
+                    }
+                },
+                "tooltip": [
+                    {
+                        "field": "University_name",
+                        "type": "nominal",
+                        "title": "University"
+                    },
+                    {
+                        "field": "Total_years",
+                        "type": "quantitative",
+                        "title": "Number of years since founded"
+                    },
+                    {
+                        "field": "UG_average_fees_(in_pounds)",
+                        "type": "quantitative",
+                        "title": "Average undergraduate fees (in pounds)"
+                    }
+                }
+            ]},
