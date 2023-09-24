@@ -4,121 +4,81 @@
     "width": 800,
     "height": 450,
     "title": {
-        "text": "Nationalities of Artists in MOMA's Collection"
+      "text": "Nationalities of Artists in MOMA's Collection"
     },
     "projection": {
-        "type": "equalEarth"
+      "type": "mercator"
     },
     "layer": [
-        {
-            "data": {
-                "name": "source0",
-                "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/maps/ne_110m.json",
-                "format": {
-                    "type": "topojson",
-                    "feature": "ne_110m_admin_0_countries"
-                }
-            },
-            "mark": {
-                "type": "geoshape",
-                "fill": "lightgrey",
-                "stroke": null,
-                "strokeWidth": 1
-            }
+      {
+        "data": {
+          "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/maps/ne_110m.json",
+          "format": {
+            "type": "topojson",
+            "feature": "ne_110m_admin_0_countries"
+          }
         },
-        {
-            "data": {
-                "name": "source1",
-                "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/datasets/countries.csv"
-            },
-            "mark": {
-                "type": "text"
-            },
-            "encoding": {
-                "longitude": {
-                    "field": "Longitude",
-                    "type": "quantitative"
-                },
-                "latitude": {
-                    "field": "Latitude",
-                    "type": "quantitative"
-                },
-                "text": {
-                    "field": "Country",
-                    "type": "nominal"
-                }
-            }
+        "transform": [{}],
+        "mark": {
+          "type": "geoshape",
+          "fill": "lightgrey",
+          "stroke": "white",
+          "strokeWidth": 1
+        }
+      },
+      {
+        "data": {
+          "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/datasets/countries.csv"
         },
-        {
-            "data": {
-                "name": "source2",
-                "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/datasets/countries.csv"
-            },
-            "mark": {
-                "type": "circle",
-                "tooltip": {
-                    "content": "data"
-                }
-            },
-            "encoding": {
-                "longitude": {
-                    "field": "Longitude",
-                    "type": "quantitative"
-                },
-                "latitude": {
-                    "field": "Latitude",
-                    "type": "quantitative"
-                },
-                "size": {
-                    "field": "Total_years",
-                    "type": "quantitative",
-                    "title": "Number of Years Since Founded",
-                    "scale": {
-                        "domain": [
-                            5,
-                            950
-                        ]
-                    }
-                },
-                "color": {
-                    "field": "UG_average_fees_(in_pounds)",
-                    "type": "quantitative",
-                    "title": [
-                        "Average Undergraduate Fees",
-                        "(in pounds)"
-                    ],
-                    "scale": {
-                        "type": "threshold",
-                        "domain": [
-                            10000,
-                            12500,
-                            15000,
-                            20000
-                        ],
-                        "range": [
-                            "#fdbe85",
-                            "#fd8d3c",
-                            "#e6550d",
-                            "#a63603",
-                            "#7E2811"
-                        ]
-                    }
-                },
-                "tooltip": [
-                    {
-                        "field": "University_name",
-                        "type": "nominal",
-                        "title": "University"
-                    },
-                    {
-                        "field": "Total_years",
-                        "type": "quantitative",
-                        "title": "Number of years since founded"
-                    },
-                    {
-                        "field": "UG_average_fees_(in_pounds)",
-                        "type": "quantitative",
-                        "title": "Average undergraduate fees (in pounds)"
-                    }
-                }
-            ]},
+        "transform": [
+          {
+            "filter": "datum.Freq >= 6000 || indexof(['Russia', 'Japan', 'China', 'Malaysia', 'India', 'Australia', 'Canada'], datum.Country) !== -1" 
+          }
+        ],
+        "mark": {"type": "text", "dy": -10, "fontWeight": "bold", "fontSize": 10},
+        "encoding": {
+          "longitude": {"field": "Longitude", "type": "quantitative"},
+          "latitude": {"field": "Latitude", "type": "quantitative"},
+          "text": {"condition": {"test": "datum.Freq >= 6000 || indexof(['Russia', 'Japan', 'China', 'Malaysia', 'India', 'Australia', 'Canada'], datum.Country) !== -1", "field": "Country", "type": "nominal"},
+          "value": ""}
+          
+  
+        }
+      },
+      {
+        "data": {
+          "url": "https://raw.githubusercontent.com/chiachinggg/FIT3179/main/datasets/countries.csv"
+        },
+        "transform": [{
+          
+          "calculate": "datum.Freq/100",
+          "as": "NormalizedFreq"
+        }],
+        
+        "mark": {
+          "type": "geoshape", "projection": "equalEarth"
+        },
+        "encoding": {
+          "size": {
+            "condition": {
+              "test": "datum.NormalizedFreq>= 100",
+              "field": "Freq",
+              "type": "quantitative",
+              "title": "Frequency"
+            }
+          },
+          "tooltip": [
+            {"field": "datum.Country", "type": "nominal", "title": "Country"
+          }],
+          "color": {
+            "field": "NormalizedFreq",
+            "type": "quantitative",
+            "scale": {
+              "scheme": "reds"
+            }
+          }
+        }
+      }
+    ]
+  }
+  
